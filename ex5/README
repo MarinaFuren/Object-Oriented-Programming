@@ -1,0 +1,99 @@
+marina92
+
+kerenlu
+
+
+=============================
+=      File description     =
+=============================
+BadInputError.java - type one exception.
+MyfileScript.java - the manager of the program.
+Parser.java - response on reading the command line.
+Section.java - holds filter, order and the warning as one object.
+WarningException.java - type two exception.
+AllFilter.java - the default filter.
+BetwwanFilter.java - size filter, passes the files between the parameters.
+ContainsFilter.java - string filter, passes if the name of the file has the 
+substring.
+ExecutableFilter.java - properties filter, passes if the file is executable.
+FileFilter.java - string filter, passes if the name of the file is as the 
+parameter.
+Filter.java - Interface that has one method 'isPass'.
+FilterFactory.java - creates new filters.
+GreaterThanFilter.java -  size filter, passes the files that greater from the 
+parameter.
+Hidden.java - properties filter, passes if the file is hidden.
+InvalidFilterError.java - exception type 2, that can be at the parameters 
+of the filter.
+NotFilter.java - the filter that returns the opposite from the regular filter.
+PrefixFilter.java - string filter, passes if the name of the file starts
+with this prefix.
+PropertiesFilter.java - response on the properties filters.
+SizeFilter.java - response on the size filters.
+SmallerThanFilter.java - size filter, passes the files that smaller than 
+the parameter.
+StringFilter.java - response on the string filters.
+SuffixFilter.java - string filter, passes if the name of the file ends
+with this suffix.
+WritableFilter.java - properties filter, passes if the file is writable.
+AbsOrder.java - the default order from 'a' to 'z'. 
+IvalidOrderError.java - exception type 2, that can be at the parameters 
+of the order.
+Order.java - Interface that extends the interface Comparator.
+OrderFactory.java - creates new orders.
+ReverseOrder.java - the order that returns the opposite order, doing reverse.
+SizeOrder.java - sorts by the size.
+TypeOrder.java - sorts by the type name from 'a' to 'z'.
+
+README
+QUESTIONS
+
+=============================
+=          Design           =
+=============================
+1) The design of this program, is dividing the big mission to modules, they
+are not depends one on each other. There is one manager MyfileScript, that reads
+the parameters from the command line, creates a parser, that reads the command line,
+checks the validity, and creates the filter and the order according to the command file.
+The creation is doing by the factories, the plus is the single- choice principle.
+The parser return array of sections, when every section has one filter one order
+and array of warning (if there is something wrong at the parameters of the filter or 
+order). It using composition. The section receives the files, filters them, sorts them by 
+the required order and return new fixed array of files.
+The filters and the orders each has different class (the open- close principle),
+The filter and the Order are interfaces, and the filters divided by hierarchy to size 
+filters, a string filters and properties filters.
+The negation filter and reverse order I did use of decorator pattern (because I wanted
+to add some functionality to the objects), so they holds order\filter and can return the 
+opposite as required.
+
+
+
+=============================
+=  Implementation details   =
+=============================
+2) The hierarchy of the exceptions:
+I divided them to two types- one and two, both of them extends Exception class.
+The first type I am catching at the main, because if I got this type of exception
+I need to close the program and to print "ERROR".
+The second type I divide to two groups, to order errors and to the filter error,
+because I wanted to divide them by the packages (but I handle then at the same way), 
+this kind of exception I am throwing at the factories, that check for validity, 
+and catching them at the parser, because the parser reading the command file and 
+counts the number of lines, so he holds array of 2 int's (because I can have only 
+2 warnings, if I have 2 invalid parameters at filter\order I need to print one warning).
+If I got this type of exception I am creating  default 
+filter\order and add the number of line to the warnings array, then I add to each section 
+this array. When I want to print the result, for each section I am checking if there
+are warnings, and if I receive true I print first the warnings and then the files.
+
+3) I used another data structure ArrayList, I am holding the files at the ArrayList<File>, 
+because I can't know which size I will need, I need to add simple an file to this array 
+(O(1)), and at the end to iterate over it (O(n)).
+In order to sort the files I used the collections sort method, that gets an array of files
+and the order how to sort them. The order interface extends the Comparator interface,
+in order to implement different orders (size, type etc.)
+
+=============================
+=    Answers to questions   =
+=============================

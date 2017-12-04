@@ -1,0 +1,144 @@
+marina92
+nitzan.wert
+
+
+=============================
+=      File description     =
+=============================
+Block.java - created for each block that we find while passing on the code
+ConditionChecker.java - check if a given line can be a condition if it appears inside while / if
+GlobalBlock.java - extends block, and has also a method list, it is the block we always start in
+InvalidMethod.java - an exception while trying to create invalid method
+Methods.java - implements the method in Sjava and check if a given line can be a method
+ReturnException.java -  an exception that create while using return wrong or not use at all
+BadInputError.java - bad input exception
+BadNumberArgs.java - an exception that create if more the one file was given
+Boolean.java - enum holds boolean options
+BracketException.java - an exception that create from wrong use in close bracket
+Compileable.java -an interface with one method "isLineValid"
+EndLineChecker.java - checks the end of the given line
+LineFixer.java - fix the given line to our "standard" line
+Parser.java - runs on the given code and checks it
+ReservedWords.java - enum holds reserved words options
+Sjavac.java - the manager of the program. try and catch exceptions
+SjavasException.java - abstract class of exception that extends an Exception class
+SyntaxException.java - abstract class of exception that extends SjavaException
+UnknownAction.java - an exception that create from invalid given line
+WrongSuffix.java - an exception that create from wrong end of line
+FactroyVariable.java - creates a new variable
+InvalidVariable.java - an exception that create when a variable cannot be created
+Type.java - enum hold all the type Sjava supports
+TypeChecker.java - this class receives a string and returns its type
+Variable.java - implements the variable in Sjava and check if a given line can be a variable
+VariableChecker.java - checks which variable will be created or appear from a given line and if it is possible
+README
+QUESTIONS
+
+=============================
+=          Design           =
+=============================
+We decided to implement our compiler using the following:
+1. global block extends block. our global block is the first block that opens right when we start reading the
+code. we will only open a block when if/while or new method appears. both global block and
+block can have its variable list, but only the global block can have a list of methods because according to
+Sjava, method can only appear on the global block. 
+we have created pointer for every block to point on the previous one, while to global block will always 
+points on null (because he is the first block always). the pointers where created in order to check for 
+variables or method if necessary.
+2.Singleton parser - we create our parser as singleton because even if we have multiply files we want only
+one parser to read then and check them.
+3. interface Compileable - we have compileable interface that have the function isLineValid, our method, 
+variable and condition. in all of the above we need to check first is the given line is even valid, if it
+is not we can not use it. only after we know if it valid we would check the specific arguments
+4. packages - we create 3 packages, the first is the main - our parser and sjava (which is the real main),
+general or common exception (for variable and method), enums, general function like line fixer which is 
+a cosmetic action. also we have end line checker which is always want we want to check first.
+5. exception hierarchy - we create an exception hierarchy, all exceptions extends exception, and we 
+separated between an sjava exceptions and input exceptions.
+in sjava we have syntax exceptions or variable/ methods exception that are created from invalid name
+or that this variable/method already exists. (this is also the answer to 6.1)
+
+exception hierarchy:
+										         Exception	
+										 /          \               \         	
+										/            \               \
+									   /              \               \
+									  /                \               \
+									 /                  \               \
+								    /                    \               \
+								   /                      \               \
+								  /                        \               \
+							SjavaException                BadInputError    BadNumberArgs
+					  /			|	    	     \	
+				     /			|      	          \ 									
+				    /		    |     			   \								
+				   /			|    	            \ 								
+				  /			    |   			     \
+                 /              |   				  \
+                /               |                      \    
+	           /                |                       \               
+	          /                 |                        \              
+	         /                  |                         \             
+	        /                   |                          \        
+ InvalidVariable           SyntaxException               InvalidMethod
+                       /       |	 \         \   
+	                  /        |      \     	\
+	                 /         |       \  		 \
+	                /          |        \  		  \
+	               /           |         \		   \
+	              /            |          \		    \
+    ReturnException   UnknownAction   WrongSuffix   CloseMethodExeption
+	                                                 /         \
+	  									            /		    \
+	  									           /		  	 \
+	  						         ReturnException		BracketException
+
+=============================
+=  Implementation details   =
+=============================
+1. block and global block-
+we chose to that our block will hold an linkedlist of variable (to the global block we added a second linked 
+list of method). in the begin of the file we cant know how many variable or method we be, and in linkedlist
+we don't have to decide. we can also use linked list iterator to run on the variable in order to check
+what we need.
+2. enum - 
+we created 3 enums -  Type, Boolean, ReservedWords.  we know all possible values in advance. 
+and we want to use only one of the small group we created.
+for example, there is not other type that Sjava supports that is not on
+enum Type.
+3. regex menu - 
+we use regex in order to analyze our test, for example to check if we have something after the line ends.
+we created an enum for the same reasons as above with all the regex we used, because in some cases we
+used the same regex twice or more and the classes have nothing in common.
+4. we allowed the use of reserved words as names.
+=============================
+=    Answers to questions   =
+=============================
+6.1:
+answered above
+6.2:
+we tried to think about this exercise in the same way as exercise 5, we tried to divide it to undepended
+modulo. at the beginning we thought to create two different block, one for method and one for if/while.
+but then we understood that there isn't a big difference between then and we can ignore it we use in flag 
+instead. 
+also, we created our needed regex in every class, because the class didn't have something in common. after we
+sew that we have repetition, we thought to create them inside enum class.
+
+- in order to modify our code to add new types of variables we would add it to Type enum class and 
+we would create a new regex for him and add it to Type Checker class.
+- we chose Unary and binary operators and Importing the methods and global variable:
+Unary and binary operators:
+we will create a new regex that will find the correct operator, then we will build a method that 
+ while check if they are comparable (from the same type or for example int-double etc, we will defined that we
+ can compare strings- in Lexicographical order. and sum will write them together) in a new class.
+Importing the methods and global variable:
+if we find improt class we will create a new global block by doing first run function on the import class, we 
+will set it as the prev scope the the original class 
+6.3  
+Regular Expressions:
+BETWEEN_BRACKETS ("\\((.*?)\\)(\\s)?(\\{)") - this regex catch the line between an open bracket and a
+close one (use in condition or method), first it find the open bracket (only one!) then allowed space or 
+anything inside except \n (in order to catch ",") then finds the close bracket- (, and then {.
+CALL_METHOD ("([A-Za-z]+[\\w]*)\\s?\\((.*?)\\)(\\s*)\\;{1}") - this regex finds a call to method, it 
+looks for a valid name, the space a optional, after an open and close bracket (that can have anything
+inside) and ends with one ;

@@ -1,0 +1,55 @@
+marina92
+
+nir2292
+
+
+=============================
+=      File description     =
+=============================
+AvlTree.java - Avl tree is a self balancing BST. In an Avl tree the differs
+between two children of any node is not bigger then one.
+Node.java - The Avl tree created from nodes, every node
+has a value (int), a height and pointers to the left, right and the parent node.
+
+
+
+=============================
+=          Design           =
+=============================
+I implemented Avl tree class and the Node class. The Node class is simple has a 
+getters and setters to all his fields (because they are private).
+The AvlTree class implements 3 different constructors, add, delete, contain, size and
+one static method to find a minimum nodes at this height of the tree.
+
+
+
+=============================
+=  Implementation details   =
+=============================
+The deletion and adding methods both uses helper functions, that gets the root
+and return a root, that can be changed after adding/deleting node.
+Both of them "working" recursively, travels on the tree, depending if the data
+is bigger- call in recursion to the itself with the right son, and the same to left.
+When the correct place found- add/delete the element.
+The deleting method (if the tree contains the data) has 3 cases: 
+no sons it's the easy, just delete it. one son- need to connect between the grandpa
+and the son. 2 sons - need to find the successor, to replace the places, 
+and then delete the element. In order that the class has 2 private methods-
+findSuccessor and findMinimum.
+The common methods is the rebalance, check balance, and the rotates, and it's because
+both of them- delete and add can change the balance of the root, and in order to fix it
+will make some rotations, and it can change the root of the tree. 
+
+
+=============================
+=    Answers to questions   =
+=============================
+Question from section 5:
+The answer is: 5,3,8,2,4,7,10,1,6,9,11,12
+if we will insert the data at his order to the tree it will reach height 4
+with the minimum number of nodes. The Insertion order is by levels, start with
+the root 5, then filling height 1 with 2 sons- 3 from left and 8 from right.
+Then going down to the height 2, '3' has 2 sons- 2 and 4, and 8 has- 7 and 10.
+Then 2 gets 1 one son 1, and that enough because we ant to get to height 4
+but with the minimum nodes, 7 has one son 6, and 10 gets 2 sons- 9 and 11,
+and the last 11 gets one son 12, and that way we reach the height 4.
